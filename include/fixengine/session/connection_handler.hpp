@@ -1,13 +1,14 @@
 #pragma once
 #include <fixengine/network/tcp_connection.hpp>
+#include <fixengine/utils/config.hpp>
 
 namespace fix::session {
     class ConnectionHandler {
         network::TCPConnection connection_;
 
     public:
-        ConnectionHandler(boost::asio::io_context &io_context, const std::string& addr, const std::string& port) :
-            connection_(network::TCPConnection::create(io_context, addr, port)) {}
+        ConnectionHandler(boost::asio::io_context &io_context, const utils::Config& config) :
+            connection_(network::TCPConnection::create(io_context, config.logon.host, config.logon.port)) {}
 
         void connect() { connection_.connect(); }
 

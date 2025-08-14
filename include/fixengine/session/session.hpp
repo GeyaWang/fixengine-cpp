@@ -1,6 +1,7 @@
 #pragma once
 #include <fixengine/network/tcp_connection.hpp>
 #include <fixengine/protocol/parser.hpp>
+#include <fixengine/utils/config.hpp>
 #include "connection_handler.hpp"
 #include "sequence_manager.hpp"
 
@@ -13,7 +14,7 @@ namespace fix::session {
         ConnectionHandler connection_handler_;
         protocol::Parser parser_;
 
-        uint16_t hb_int_s_ = 1;
+        const utils::Config& config_;
 
         void run_hb_();
         void on_hb_();
@@ -23,7 +24,7 @@ namespace fix::session {
         void logon_();
 
     public:
-        Session(const std::string& addr, const std::string& port) : connection_handler_(io_context_, addr, port) {}
+        explicit Session(const utils::Config& config) : connection_handler_(io_context_, config), config_(config) {}
 
         void start();
         void disconnect();

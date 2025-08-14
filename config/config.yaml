@@ -1,7 +1,7 @@
 version: FIX.4.4
 sender_comp_id: FIXSIM-CLIENT
 target_comp_id: FIXSIM-SERVER
-socket:
+logon:
   host: 127.0.0.1
   port: 1844
 heartbeat_int: 1

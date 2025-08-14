@@ -6,7 +6,7 @@
 
 namespace fix::session {
     void Session::run_hb_() {
-        hb_timer_.expires_after(std::chrono::seconds(hb_int_s_));
+        hb_timer_.expires_after(std::chrono::seconds(config_.heartbeat_int));
         hb_timer_.async_wait(
             [this](const boost::system::error_code&) {
                 on_hb_();
@@ -40,7 +40,7 @@ namespace fix::session {
             .add(52, utils::sending_time())
             .add(56, "FIXSIM-SERVER")
             .add(98, 0)
-            .add(108, hb_int_s_)
+            .add(108, config_.heartbeat_int)
             .add(141, "Y")
             .build()
         );
