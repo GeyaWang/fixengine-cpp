@@ -99,13 +99,10 @@ namespace fix::protocol {
 
         // MsgType
         fields_.emplace(fields_.begin(), 35, msg_type_);
-
         // BodySize
         fields_.emplace(fields_.begin(), 9, std::to_string(body_size_()));
-
         // BeginStr
         fields_.emplace(fields_.begin(), 8, begin_str_);
-
         // Checksum
         add(10, std::format("{:03d}", checksum_()));
 
