@@ -1,33 +1,38 @@
 #pragma once
 #include <fixengine/network/tcp_connection.hpp>
-#include <fixengine/protocol/parser.hpp>
-#include <fixengine/utils/config.hpp>
+#include <fixengine/config/config.hpp>
 #include "connection_handler.hpp"
 #include "sequence_manager.hpp"
+#include <queue>
 
 namespace fix::session {
     class Session {
         boost::asio::io_context io_context_;
         boost::asio::high_resolution_timer hb_timer_{io_context_};
+        boost::asio::high_resolution_timer sleep_timer_{io_context_};
 
         SequenceManager sequence_manager_;
         ConnectionHandler connection_handler_;
-        protocol::Parser parser_;
 
         const utils::Config& config_;
+        std::queue<utils::ActionPtr> action_queue_;
 
         void run_hb_();
         void on_hb_();
 
-        void on_receive_(const std::string& msg);
+        void on_msg_(const std::string& msg);
+        std::function<void(std::string)> msg_handler_ = [this](const std::string& msg){ on_msg_(msg); };
 
         void logon_();
+        void logout_();
+
+        void next_action_();
 
     public:
-        explicit Session(const utils::Config& config) : connection_handler_(io_context_, config), config_(config) {}
+        explicit Session(const utils::Config& config);
 
         void start();
-        void disconnect();
+        void stop();
 
     };
 }

@@ -14,12 +14,10 @@ namespace fix::network {
         tcp::resolver::results_type endpoints_;
         boost::asio::streambuf buffer_;
 
-        MsgHandler msg_handler_;
-
         TCPConnection(boost::asio::io_context &io_context, tcp::resolver::results_type endpoints):
             socket_(io_context), endpoints_(std::move(endpoints)) {}
 
-        void read_until_();
+        std::string read_buffer_();
 
     public:
         static TCPConnection create(boost::asio::io_context& io_context, const std::string& addr, const std::string& port);
@@ -30,9 +28,9 @@ namespace fix::network {
         void close();
 
         void write(const std::string& msg);
-        void write(const std::string& msg, boost::system::error_code& error);
         void async_write(const std::string& msg, const ErrorHandler& handler);
 
-        void start(MsgHandler on_msg);
+        void listen(const MsgHandler& on_msg);
+        void async_listen(const MsgHandler& on_msg);
     };
 }

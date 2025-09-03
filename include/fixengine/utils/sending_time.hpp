@@ -3,7 +3,7 @@
 #include <chrono>
 
 namespace fix::utils {
-    inline std::string sending_time() {
+    inline std::string current_time() {
         const auto now = std::chrono::system_clock::now();
         return std::format(
             "{:%Y%m%d-%H:%M:%S}.{:03d}",

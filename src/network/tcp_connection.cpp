@@ -13,8 +13,7 @@ namespace fix::network {
         try {
             boost::asio::connect(socket_, endpoints_);
         } catch (boost::system::system_error&) {
-            std::cerr << "Failed to connect to endpoint\n";
-            throw;
+            throw std::runtime_error("Failed to connect to endpoints");
         }
     }
 
@@ -23,39 +22,47 @@ namespace fix::network {
     }
 
     void TCPConnection::write(const std::string &msg) {
-        boost::asio::write(socket_, boost::asio::buffer(msg));
-    }
-
-    void TCPConnection::write(const std::string &msg, boost::system::error_code& error) {
+        boost::system::error_code error;
         boost::asio::write(socket_, boost::asio::buffer(msg), error);
+
+        if (error == boost::asio::error::bad_descriptor) {
+            throw std::runtime_error("Failed to send message");
+        }
     }
 
     void TCPConnection::async_write(const std::string& msg, const ErrorHandler& handler) {
         boost::asio::async_write(socket_, boost::asio::buffer(msg), handler);
     }
 
-    void TCPConnection::read_until_() {
+    std::string TCPConnection::read_buffer_() {
+        std::istream is(&buffer_);
+        std::string str;
+        std::getline(is, str);
+        buffer_.consume(buffer_.size());
+        return str;
+    }
+
+    void TCPConnection::listen(const MsgHandler& on_msg) {
+        boost::system::error_code error;
+        boost::asio::read_until(socket_, buffer_, "\x01", error);
+
+        if (error == boost::asio::error::eof) {
+            throw std::runtime_error("Connection closed by server");
+        }
+
+        on_msg(read_buffer_());
+    }
+
+    void TCPConnection::async_listen(const MsgHandler &on_msg) {
         boost::asio::async_read_until(
             socket_,
             buffer_,
             "\x01",
-            [this](const boost::system::error_code& error, std::size_t) {
+            [this, on_msg](const boost::system::error_code& error, std::size_t) {
                 if (!error) {
-                    std::istream is(&buffer_);
-                    std::string str;
-                    std::getline(is, str);
-                    buffer_.consume(buffer_.size());
-                    msg_handler_(str);
-
-                    read_until_();
+                    on_msg(read_buffer_());
                 }
             }
         );
     }
-
-    void TCPConnection::start(MsgHandler on_msg) {
-        msg_handler_ = std::move(on_msg);
-        read_until_();
-    }
-
 }

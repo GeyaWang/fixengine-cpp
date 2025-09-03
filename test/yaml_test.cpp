@@ -1,9 +1,7 @@
-#include <iostream>
 #include <string>
-#include <fixengine/utils/config.hpp>
+#include <../include/fixengine/config/config.hpp>
 
 int main() {
-    auto config = fix::utils::Config::load_file("C:/Users/geyae/CLionProjects/fixengine_cpp/config/config.yaml");
-    std::cout << "version=" << config.version << "\n";
+    fix::utils::Config config {"C:/Users/geyae/CLionProjects/fixengine_cpp/config.yaml"};
     return 0;
 }

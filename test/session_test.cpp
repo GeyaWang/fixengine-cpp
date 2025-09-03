@@ -1,7 +1,8 @@
 #include <fixengine/session/session.hpp>
 
 int main() {
-    fix::session::Session session{"127.0.0.1", "1844"};
+    const fix::utils::Config config {"C:/Users/geyae/CLionProjects/fixengine_cpp/config.yaml"};
+    fix::session::Session session(config);
     session.start();
 
     return 0;

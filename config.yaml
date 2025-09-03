@@ -1,0 +1,40 @@
+version: FIX.4.2
+sender_comp_id: BANZAI
+target_comp_id: FIXIMULATOR
+socket:
+  host: 127.0.0.1
+  port: 9878
+heartbeat_int: 5
+
+actions:
+  - sleep: 1
+  - NewOrderSingle:
+      ClOrdID: order0
+      HandlInst: 3
+      Symbol: IBM
+      Side: 2
+      OrdType: 2
+      Price: 200
+  - NewOrderSingle:
+      fields:
+        11: order1
+        21: 3
+        55: YHOO
+        54: 1
+        40: 1
+  - sleep: 2
+  - CancelReplace:
+      OrigClOrdID: order0
+      ClOrdID: replace0
+      HandlInst: 3
+      Symbol: IBM
+      Side: 1
+      OrdType: 2
+      Price: 250
+  - OrderCancel:
+      OrigClOrdID: order1
+      ClOrdID: cancel1
+      Symbol: YHOO
+      Side: 1
+  - sleep: 30
+  - logout
