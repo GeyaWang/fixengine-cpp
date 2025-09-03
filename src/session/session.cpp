@@ -93,7 +93,6 @@ namespace fix::session {
 
             switch (action->action_type) {
                 case action::ActionType::SLEEP: {
-                    std::cout << "sleeping\n";
                     auto sleep_action = dynamic_cast<action::Sleep*>(action.get());
                     if (sleep_action == nullptr) break;
                     sleep_timer_.expires_after(std::chrono::seconds(sleep_action->duration));
