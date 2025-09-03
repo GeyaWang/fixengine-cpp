@@ -4,11 +4,10 @@ project(fixengine)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(Boost 1.88.0 REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 file(GLOB SOURCES ./src/* ./src/*/* ./src/*/*/*)
 add_library(${PROJECT_NAME} ${SOURCES})
-
-add_subdirectory(third-party/yaml-cpp)
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC
