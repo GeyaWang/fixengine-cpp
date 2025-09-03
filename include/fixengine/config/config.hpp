@@ -2,7 +2,7 @@
 #include <yaml-cpp/yaml.h>
 #include <fixengine/action/action.hpp>
 
-namespace fix::utils {
+namespace fix::config {
     using ActionPtr = std::shared_ptr<action::Action>;
 
     struct SocketConfig {
@@ -17,9 +17,9 @@ namespace fix::utils {
         static void order_add_if_present_(const YAML::Node& node, action::OrderMsg& order, const std::string& field, int tag);
         static void order_add_fields_(const YAML::Node& node, action::OrderMsg& order);
 
-        action::NewOrderSingle get_new_order_single_(const YAML::Node& node) const;
-        action::OrderCancel get_order_cancel_(const YAML::Node& node) const;
-        action::CancelReplace get_cancel_replace_(const YAML::Node& node) const;
+        [[nodiscard]] action::NewOrderSingle get_new_order_single_(const YAML::Node& node) const;
+        [[nodiscard]] action::OrderCancel get_order_cancel_(const YAML::Node& node) const;
+        [[nodiscard]] action::CancelReplace get_cancel_replace_(const YAML::Node& node) const;
 
         void load_(const std::string& filepath);
 

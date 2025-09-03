@@ -1,7 +1,7 @@
 #include <fixengine/session/session.hpp>
 
 int main() {
-    const fix::utils::Config config {"C:/Users/geyae/CLionProjects/fixengine_cpp/config.yaml"};
+    const fix::config::Config config {"C:/Users/geyae/CLionProjects/fixengine_cpp/config.yaml"};
     fix::session::Session session(config);
     session.start();
 

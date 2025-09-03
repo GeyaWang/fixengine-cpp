@@ -14,8 +14,8 @@ namespace fix::session {
         SequenceManager sequence_manager_;
         ConnectionHandler connection_handler_;
 
-        const utils::Config& config_;
-        std::queue<utils::ActionPtr> action_queue_;
+        const config::Config& config_;
+        std::queue<config::ActionPtr> action_queue_{};
 
         void run_hb_();
         void on_hb_();
@@ -26,10 +26,10 @@ namespace fix::session {
         void logon_();
         void logout_();
 
-        void next_action_();
+        void do_actions();
 
     public:
-        explicit Session(const utils::Config& config);
+        explicit Session(const config::Config& config);
 
         void start();
         void stop();

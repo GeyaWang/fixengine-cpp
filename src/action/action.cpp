@@ -13,7 +13,7 @@ namespace fix::action {
     }
 
     std::string OrderMsg::build(const int sequence) {
-        msg_.add_front(52, utils::current_time());
+        msg_.add_front(52, config::current_time());
         msg_.add_front(34, sequence);
 
         return msg_.build();

@@ -2,7 +2,7 @@
 #include <string>
 #include <chrono>
 
-namespace fix::utils {
+namespace fix::config {
     inline std::string current_time() {
         const auto now = std::chrono::system_clock::now();
         return std::format(

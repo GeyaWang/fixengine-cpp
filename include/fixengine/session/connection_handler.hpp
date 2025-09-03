@@ -10,7 +10,7 @@ namespace fix::session {
         network::TCPConnection connection_;
 
     public:
-        ConnectionHandler(boost::asio::io_context &io_context, const utils::Config& config) :
+        ConnectionHandler(boost::asio::io_context &io_context, const config::Config& config) :
             connection_(network::TCPConnection::create(io_context, config.socket.host, config.socket.port)) {}
 
         void connect() { connection_.connect(); }

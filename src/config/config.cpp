@@ -1,7 +1,7 @@
 #include <fixengine/config/config.hpp>
 #include <fixengine/utils/sending_time.hpp>
 
-namespace fix::utils {
+namespace fix::config {
     bool Config::is_map_(const YAML::Node &node, const std::string &s) {
         return node.IsMap() && node[s].IsDefined();
     }
@@ -73,15 +73,16 @@ namespace fix::utils {
         auto actions_node = config["actions"];
         for (YAML::const_iterator actions_it = actions_node.begin(); actions_it != actions_node.end(); ++actions_it) {
             if (auto action = *actions_it; is_map_(action, "NewOrderSingle")) {
-                actions.emplace_back(std::make_unique<action::OrderMsg>(get_new_order_single_(action)));
+                actions.emplace_back(std::make_shared<action::OrderMsg>(get_new_order_single_(action)));
             } else if (is_map_(action, "OrderCancel")) {
-                actions.emplace_back(std::make_unique<action::OrderMsg>(get_order_cancel_(action)));
+
+                actions.emplace_back(std::make_shared<action::OrderMsg>(get_order_cancel_(action)));
             } else if (is_map_(action, "CancelReplace")) {
-                actions.emplace_back(std::make_unique<action::OrderMsg>(get_cancel_replace_(action)));
+                actions.emplace_back(std::make_shared<action::OrderMsg>(get_cancel_replace_(action)));
             } else if (is_map_(action, "sleep")) {
-                actions.emplace_back(std::make_unique<action::Sleep>(action["sleep"].as<int>()));
+                actions.emplace_back(std::make_shared<action::Sleep>(action["sleep"].as<int>()));
             } else if (is_scalar_(action, "logout")) {
-                actions.emplace_back(std::make_unique<action::Logout>());
+                actions.emplace_back(std::make_shared<action::Logout>());
             }
         }
     }

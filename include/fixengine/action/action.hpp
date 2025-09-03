@@ -17,8 +17,8 @@ namespace fix::action {
     };
 
     struct Sleep : Action {
-        explicit Sleep(const int time) : Action(ActionType::SLEEP), timeout(time) {}
-        int timeout;
+        explicit Sleep(const int time) : Action(ActionType::SLEEP), duration(time) {}
+        int duration;
     };
 
     struct Logout : Action {
@@ -40,7 +40,7 @@ namespace fix::action {
         ) : Action(ActionType::ORDER_MSG), msg_{begin_str, msg_type}, begin_str_(begin_str), msg_type_(msg_type) {
             add(49, sender_comp_id);
             add(56, target_comp_id);
-            add(60, utils::current_time());
+            add(60, config::current_time());
         }
 
         OrderMsg& add(int tag, const std::string& value);

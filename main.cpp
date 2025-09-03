@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
         throw std::invalid_argument("required args: -f/-file");
     }
 
-    fix::session::Session session(fix::utils::Config{filepath});
+    fix::session::Session session(fix::config::Config{filepath});
     session.start();
     return 0;
 }

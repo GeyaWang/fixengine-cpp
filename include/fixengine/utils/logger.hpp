@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace fix::utils {
+namespace fix::config {
     enum class LogType {
         SEND,
         RECEIVE,
