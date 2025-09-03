@@ -36,5 +36,5 @@ actions:
       ClOrdID: cancel1
       Symbol: YHOO
       Side: 1
-  - sleep: 30
+  - sleep: 15
   - logout
