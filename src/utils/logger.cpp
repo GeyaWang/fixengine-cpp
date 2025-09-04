@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace fix::config {
+namespace fix::utils {
     std::string Logger::format_fix_msg(const std::string &msg) {
         std::string new_msg = msg;
         std::ranges::replace(new_msg, '\x01', '|');

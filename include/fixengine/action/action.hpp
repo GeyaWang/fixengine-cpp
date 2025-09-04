@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <fixengine/protocol/message.hpp>
-#include <fixengine/utils/sending_time.hpp>
+#include <fixengine/utils/time.hpp>
 
 namespace fix::action {
     enum class ActionType {
@@ -40,7 +40,7 @@ namespace fix::action {
         ) : Action(ActionType::ORDER_MSG), msg_{begin_str, msg_type}, begin_str_(begin_str), msg_type_(msg_type) {
             add(49, sender_comp_id);
             add(56, target_comp_id);
-            add(60, config::current_time());
+            add(60, utils::time::get_UTC());
         }
 
         OrderMsg& add(int tag, const std::string& value);

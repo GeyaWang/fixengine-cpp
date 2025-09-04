@@ -1,6 +1,6 @@
 #include <fixengine/session/session.hpp>
 #include <fixengine/protocol/message.hpp>
-#include <fixengine/utils/sending_time.hpp>
+#include <fixengine/utils/time.hpp>
 #include <iostream>
 
 namespace fix::session {
@@ -31,28 +31,27 @@ namespace fix::session {
             protocol::Message{config_.version, "0"}
                 .add(34, sequence_manager_.increment())
                 .add(49, config_.sender_comp_id)
-                .add(52, config::current_time())
+                .add(52, utils::time::get_UTC())
                 .add(56, config_.target_comp_id)
                 .build()
         );
     }
 
     void Session::on_msg_(const std::string& msg) {
-        protocol::Message parsed_msg{msg};
-
+        const protocol::Message parsed_msg{msg};
         const auto msg_type = parsed_msg.find(35);
 
         if (msg_type != "0") {
-            config::Logger::log(config::LogType::RECEIVE, msg);
+            utils::Logger::log(utils::LogType::RECEIVE, msg);
         }
 
         if ( msg_type == "3") {
-            config::Logger::log(config::LogType::REJECT, parsed_msg.find(58));
+            utils::Logger::log(utils::LogType::REJECT, parsed_msg.find(58));
         } else if (msg_type == "5") {
-            config::Logger::log(config::LogType::STOP_LOGOUT, "Logged out");
+            utils::Logger::log(utils::LogType::STOP_LOGOUT, "Logged out");
             stop();
         } else if (msg_type == "8") {
-            config::Logger::log(config::LogType::EXECUTION_REPORT, config::Logger::get_ord_status(parsed_msg.find(150)));
+            utils::Logger::log(utils::LogType::EXECUTION_REPORT, utils::Logger::get_ord_status(parsed_msg.find(150)));
         }
     }
 
@@ -60,25 +59,25 @@ namespace fix::session {
         const auto msg = protocol::Message{config_.version, "A"}
             .add(34, sequence_manager_.increment())
             .add(49, config_.sender_comp_id)
-            .add(52, config::current_time())
+            .add(52, utils::time::get_UTC())
             .add(56, config_.target_comp_id)
             .add(98, 0)
             .add(108, config_.heartbeat_int)
             .add(141, "Y")
             .build();
         connection_handler_.send(msg);
-        config::Logger::log(config::LogType::SEND, msg);
+        utils::Logger::log(utils::LogType::SEND, msg);
     }
 
     void Session::logout_() {
         const auto msg = protocol::Message{config_.version, "5"}
             .add(34, sequence_manager_.increment())
             .add(49, config_.sender_comp_id)
-            .add(52, config::current_time())
+            .add(52, utils::time::get_UTC())
             .add(56, config_.target_comp_id)
             .build();
         connection_handler_.send(msg);
-        config::Logger::log(config::LogType::SEND, msg);
+        utils::Logger::log(utils::LogType::SEND, msg);
     }
 
     void Session::stop() {
@@ -108,7 +107,7 @@ namespace fix::session {
                     if (order_msg_action == nullptr) break;
                     const auto msg = order_msg_action->build(sequence_manager_.increment());
                     connection_handler_.send(msg);
-                    config::Logger::log(config::LogType::SEND, msg);
+                    utils::Logger::log(utils::LogType::SEND, msg);
                     break;
                 }
                 case action::ActionType::LOGOUT: {
@@ -129,7 +128,7 @@ namespace fix::session {
             do_actions();
             io_context_.run();
         } catch (const std::runtime_error& error) {
-            config::Logger::log(config::LogType::STOP_ERR, error.what());
+            utils::Logger::log(utils::LogType::STOP_ERR, error.what());
             stop();
         }
     }

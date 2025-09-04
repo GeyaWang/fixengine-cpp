@@ -1,5 +1,5 @@
 #include <fixengine/action/action.hpp>
-#include <fixengine/utils/sending_time.hpp>
+#include <fixengine/utils/time.hpp>
 
 namespace fix::action {
     OrderMsg& OrderMsg::add(const int tag, const std::string& value) {
@@ -13,7 +13,7 @@ namespace fix::action {
     }
 
     std::string OrderMsg::build(const int sequence) {
-        msg_.add_front(52, config::current_time());
+        msg_.add_front(52, utils::time::get_UTC());
         msg_.add_front(34, sequence);
 
         return msg_.build();

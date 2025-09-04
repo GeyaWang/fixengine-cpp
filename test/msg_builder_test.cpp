@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <fixengine/protocol/message.hpp>
-#include <fixengine/utils/sending_time.hpp>
+#include <fixengine/utils/time.hpp>
 
 int main() {
     fix::protocol::Message msg{"FIX.4.2", "D"};
